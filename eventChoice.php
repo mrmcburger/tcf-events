@@ -29,6 +29,18 @@
     if($prepared_request->rowCount())
     {
         $_SESSION['event'] = $event_shortname;
+
+        #On incrémente le compteur de visites
+        $results = $pdo->query('SELECT id FROM events WHERE shortname="'.$event_shortname.'"');
+        $results = $results->fetch();
+        $id = $results['id'];
+
+        $results = $pdo->query('SELECT count FROM counter WHERE id='.$id);
+        $results = $results->fetch();
+        $count = $results['count'];
+        $count++;
+
+        $results = $pdo->query('UPDATE counter SET count='.$count.' WHERE id='.$id);            
     }
 
     header('Location: index.php');
